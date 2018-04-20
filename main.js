@@ -1,43 +1,26 @@
-const socket = io('https://stream3005.herokuapp.com/');
+const socket = io('https://maginnodejs.herokuapp.com/');
 
 $('#div-chat').hide();
-
-let customConfig;
-
-$.ajax({
-  url: "https://service.xirsys.com/ice",
-  data: {
-    ident: "vanpho",
-    secret: "2b1c2dfe-4374-11e7-bd72-5a790223a9ce",
-    domain: "vanpho93.github.io",
-    application: "default",
-    room: "default",
-    secure: 1
-  },
-  success: function (data, status) {
-    // data.d is where the iceServers object lives
-    customConfig = data.d;
-    console.log(customConfig);
-  },
-  async: false
-});
 
 socket.on('DANH_SACH_ONLINE', arrUserInfo => {
     $('#div-chat').show();
     $('#div-dang-ky').hide();
 
     arrUserInfo.forEach(user => {
-        const { ten, peerId } = user;
-        $('#ulUser').append(`<li id="${peerId}">${ten}</li>`);
+        //const { ten, peerId } = user;
+        //$('#ulUser').append(`<li id="${peerId}">${ten}</li>`);
+        $('#ulUser').append('<li id="' + user.peerId + '">' + user.ten + '</li>');
     });
 
     socket.on('CO_NGUOI_DUNG_MOI', user => {
-        const { ten, peerId } = user;
-        $('#ulUser').append(`<li id="${peerId}">${ten}</li>`);
+        //const { ten, peerId } = user;
+        //$('#ulUser').append(`<li id="${peerId}">${ten}</li>`);
+        $('#ulUser').append('<li id="' + user.peerId + '">' + user.ten + '</li>');
     });
 
     socket.on('AI_DO_NGAT_KET_NOI', peerId => {
-        $(`#${peerId}`).remove();
+        //$(`#${peerId}`).remove();
+        $('#ulUser #' + peerId).remove();
     });
 });
 
@@ -58,12 +41,12 @@ function playStream(idVideoTag, stream) {
 // openStream()
 // .then(stream => playStream('localStream', stream));
 
+//const peer = new Peer({ key: 'tkv5g2acaree9udi' });
 const peer = new Peer({ 
     key: 'peerjs', 
-    host: 'mypeer3005.herokuapp.com', 
+    host: 'maginpeerjs.herokuapp.com', 
     secure: true, 
-    port: 443, 
-    config: customConfig 
+    port: 443
 });
 
 peer.on('open', id => {
